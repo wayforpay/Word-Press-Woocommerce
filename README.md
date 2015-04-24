@@ -5,12 +5,13 @@
 ----
 >1. Содержимое архива поместить в папку плагинов  Wordpress ( по-умолчанию - {корень сайта}/wp-content/plugins/)
 
->2. Зайти в админ раздел сайта  (/wp-admin/)
+>2. Зайти в админ раздел сайта  (/wp-admin/) и активировать плагин "WooCommerce - WayForPay"
 
 >3. Перейти в раздел "WooCommerce" -> "Settings" -> "Checkout" 
 
->4. Выбрать меню "Платежи" ( "Payments" )
+>4. Внизу страницы в пункте "Payment Gateways", нажать кнопку "Settings" напротив "WayForPay Payments"
 
->5. Включить модуль WayForPay.
+>5. Ввести данные вашего мерчанта.
 
->6. Ввести данные вашего мерчанта.
+
+![Settings](https://github.com/wayforpay/Word-Press-Woocommerce/blob/master/settings.png)
