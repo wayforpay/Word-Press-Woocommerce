@@ -36,7 +36,7 @@ function woocommerce_wayforpay_init()
         const ORDER_APPROVED = 'Approved';
         const SIGNATURE_SEPARATOR = ';';
         const ORDER_SEPARATOR = ":";
-        const ORDER_SUFFIX = '_woo_w4p';
+        const ORDER_SUFFIX = '_woo_w4p_';
 
         protected $keysForResponseSignature = array(
             'merchantAccount',
@@ -347,7 +347,7 @@ function woocommerce_wayforpay_init()
             $order = new WC_Order($order_id);
 
             $wayforpay_args = array(
-                'orderReference' => $order_id . self::ORDER_SUFFIX,
+                'orderReference' => $order_id . self::ORDER_SUFFIX.time(),
                 'orderDate' => strtotime($order->post->post_date),
                 'currency' => 'UAH',
                 'amount' => $order->get_total(),
