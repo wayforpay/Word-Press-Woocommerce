@@ -176,8 +176,12 @@ function woocommerce_wayforpay_init()
          **/
         function receipt_page($order)
         {
+            global $woocommerce;
+
             echo '<p>' . __('Спасибо за ваш заказ, сейчас вы будете перенаправлены на страницу оплаты WayForPay.', 'kdc') . '</p>';
             echo $this->generate_wayforpay_form($order);
+
+            $woocommerce->cart->empty_cart();
         }
 
         /**
@@ -283,6 +287,7 @@ function woocommerce_wayforpay_init()
          */
         public function checkResponse($inputData)
         {
+            die(__FILE__);
             global $wpdb;
             $ref = $inputData['orderReference'];
             $sessID = explode("_", $ref);
@@ -346,9 +351,11 @@ function woocommerce_wayforpay_init()
         {
             $order = new WC_Order($order_id);
 
+            $orderDate = isset($order->post->post_date)? $order->post->post_date : $order->order_date;
+
             $wayforpay_args = array(
                 'orderReference' => $order_id . self::ORDER_SUFFIX.time(),
-                'orderDate' => strtotime($order->post->post_date),
+                'orderDate' => strtotime($orderDate),
                 'currency' => 'UAH',
                 'amount' => $order->get_total(),
                 'returnUrl' => $this->getCallbackUrl(),
@@ -418,16 +425,8 @@ function woocommerce_wayforpay_init()
             if (!$service) {
                 return $redirect_url;
             }
-            //For wooCoomerce 2.0
-            return add_query_arg('wc-api', get_class($this), $redirect_url);
-        }
 
-        private function getAmount($order)
-        {
-            $localeInfo = localeconv();
-            return strpos("{$order->order_total}", $localeInfo['decimal_point'])
-                ? str_replace($localeInfo['decimal_point'], "", "{$order->order_total}")
-                : "{$order->order_total}00";
+            return add_query_arg('wc-api', get_class($this), $redirect_url);
         }
 
         private function getLanguage()
@@ -435,17 +434,6 @@ function woocommerce_wayforpay_init()
             return substr(get_bloginfo('language'), 0, 2);
         }
 
-        private function getEmail($order)
-        {
-            $current_user = wp_get_current_user();
-            $email = $current_user->user_email;
-
-            if (empty($email)) {
-                $email = $order->billing_email;
-            }
-
-            return $email;
-        }
 
         protected function isPaymentValid($response)
         {
