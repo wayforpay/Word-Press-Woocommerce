@@ -287,7 +287,6 @@ function woocommerce_wayforpay_init()
          */
         public function checkResponse($inputData)
         {
-            die(__FILE__);
             global $wpdb;
             $ref = $inputData['orderReference'];
             $sessID = explode("_", $ref);
