@@ -355,16 +355,12 @@ function woocommerce_wayforpay_init()
             $wayforpay_args = array(
                 'orderReference' => $order_id . self::ORDER_SUFFIX.time(),
                 'orderDate' => strtotime($orderDate),
-                'currency' => 'UAH',
+                'currency' => get_woocommerce_currency(),
                 'amount' => $order->get_total(),
                 'returnUrl' => $this->getCallbackUrl(),
                 'serviceUrl' => $this->getCallbackUrl(true),
                 'language' => $this->getLanguage()
             );
-            if (get_woocommerce_currency() != 'UAH') {
-                //TODO add alternative currency
-            }
-
 
             $items = $order->get_items();
             foreach ($items as $item) {
