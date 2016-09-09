@@ -351,11 +351,17 @@ function woocommerce_wayforpay_init()
             $order = new WC_Order($order_id);
 
             $orderDate = isset($order->post->post_date)? $order->post->post_date : $order->order_date;
+            
+            $currency = str_replace(
+            	['ГРН'],
+            	['UAH'],
+            	get_woocommerce_currency()
+    	    );
 
             $wayforpay_args = array(
                 'orderReference' => $order_id . self::ORDER_SUFFIX.time(),
                 'orderDate' => strtotime($orderDate),
-                'currency' => get_woocommerce_currency(),
+                'currency' => $currency,
                 'amount' => $order->get_total(),
                 'returnUrl' => $this->getCallbackUrl(),
                 'serviceUrl' => $this->getCallbackUrl(true),
