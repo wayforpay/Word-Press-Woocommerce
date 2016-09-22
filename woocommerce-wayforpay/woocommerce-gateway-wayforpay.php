@@ -353,8 +353,8 @@ function woocommerce_wayforpay_init()
             $orderDate = isset($order->post->post_date)? $order->post->post_date : $order->order_date;
             
             $currency = str_replace(
-            	['ГРН'],
-            	['UAH'],
+            	array('ГРН'),
+            	array('UAH'),
             	get_woocommerce_currency()
     	    );
 
