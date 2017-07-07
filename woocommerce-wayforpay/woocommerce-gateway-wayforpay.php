@@ -242,7 +242,7 @@ function woocommerce_wayforpay_init()
             $data['merchantTransactionSecureType'] = 'AUTO';
 
             $data['merchantSignature'] = $this->getRequestSignature($data);
-	    $data['signString'] = $this->getSignature($options, $this->keysForSignature, true);
+	    $data['signString'] = $this->getSignature($data, $this->keysForSignature, true);
             return $this->generateForm($data);
         }
 
