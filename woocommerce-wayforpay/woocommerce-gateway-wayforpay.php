@@ -205,9 +205,10 @@ function woocommerce_wayforpay_init()
         /**
          * @param $option
          * @param $keys
+         * @param $hashOnly
          * @return string
          */
-        public function getSignature($option, $keys)
+        public function getSignature($option, $keys, $hashOnly = false)
         {
             $hash = array();
             foreach ($keys as $dataKey) {
@@ -223,7 +224,11 @@ function woocommerce_wayforpay_init()
                 }
             }
             $hash = implode(';', $hash);
-            return hash_hmac('md5', $hash, $this->secretKey);
+            if ($hashOnly) {
+		return base64_encode($hash);
+	    } else {
+                return hash_hmac('md5', $hash, $this->secretKey);
+	    }
         }
 
         /**
@@ -237,6 +242,7 @@ function woocommerce_wayforpay_init()
             $data['merchantTransactionSecureType'] = 'AUTO';
 
             $data['merchantSignature'] = $this->getRequestSignature($data);
+	    $data['signString'] = $this->getSignature($options, $this->keysForSignature, true);
             return $this->generateForm($data);
         }
 
