@@ -376,7 +376,7 @@ function woocommerce_wayforpay_init()
 
             $items = $order->get_items();
             foreach ($items as $item) {
-                $wayforpay_args['productName'][] = $item['name'];
+                $wayforpay_args['productName'][] = esc_html($item['name']);
                 $wayforpay_args['productCount'][] = $item['qty'];
                 $wayforpay_args['productPrice'][] = $item['line_total'];
             }
