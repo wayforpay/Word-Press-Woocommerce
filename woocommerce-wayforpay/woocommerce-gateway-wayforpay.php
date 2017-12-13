@@ -431,7 +431,7 @@ function woocommerce_wayforpay_init()
 
             if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
                 $redirect_url = $this->get_return_url($order);
-            else {
+	    } else {
                 $redirect_url = get_permalink($this->redirect_page_id);
             }
 
