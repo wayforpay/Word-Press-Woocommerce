@@ -464,8 +464,6 @@ function woocommerce_wayforpay_init()
             }
 
             if ($response['transactionStatus'] == self::ORDER_APPROVED) {
-
-                $order->update_status('processing');
                 $order->payment_complete();
                 $order->add_order_note('WayForPay.com payment successful.<br/>WayForPay.com ID: ' . ' (' . $_REQUEST['payment_id'] . ')');
                 return true;
