@@ -139,6 +139,12 @@ function woocommerce_wayforpay_init()
                     'options' => $this->wayforpay_get_pages('Select Page'),
                     'description' => __('URL of success page', 'kdc'),
                     'desc_tip' => true),
+                'returnUrl_m' => array('title' => __('или укажите'),
+                    'type' => 'text',
+                    'description' => __('URL of success page', 'kdc'),
+                    'default' => '',
+                    'desc_tip' => true
+                ),
                 'serviceUrl' => array('title' => __('Service URL'),
                     'options' => $this->wayforpay_get_pages('Select Page'),
                     'type' => 'select',
@@ -430,6 +436,12 @@ function woocommerce_wayforpay_init()
 
             $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
             if (!$service) {
+		if (
+		    isset($this->settings['returnUrl_m']) &&
+		    trim($this->settings['returnUrl_m']) !== ''
+	   	) {
+		    return trim($this->settings['returnUrl_m']);
+		}
                 return $redirect_url;
             }
 
