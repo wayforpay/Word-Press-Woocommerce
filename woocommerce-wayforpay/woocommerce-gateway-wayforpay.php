@@ -375,8 +375,8 @@ function woocommerce_wayforpay_init()
                 'orderDate' => strtotime($orderDate),
                 'currency' => $currency,
                 'amount' => $order->get_total(),
-                'returnUrl' => $this->getCallbackUrl(),
-                'serviceUrl' => $this->getCallbackUrl(true),
+                'returnUrl' => $this->getCallbackUrl($order),
+                'serviceUrl' => $this->getCallbackUrl($order, true),
                 'language' => $this->getLanguage()
             );
 
@@ -428,13 +428,19 @@ function woocommerce_wayforpay_init()
         }
 
         /**
+         * @param WC_Order $order
          * @param bool $service
          * @return bool|string
          */
-        private function getCallbackUrl($service = false)
+        private function getCallbackUrl($order, $service = false)
         {
 
-            $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
+            if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
+                $redirect_url = $this->get_return_url($order);
+	    } else {
+                $redirect_url = get_permalink($this->redirect_page_id);
+            }
+
             if (!$service) {
 		if (
 		    isset($this->settings['returnUrl_m']) &&
