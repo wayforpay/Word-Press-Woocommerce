@@ -34,6 +34,7 @@ function woocommerce_wayforpay_init()
         protected $url = 'https://secure.wayforpay.com/pay';
 
         const ORDER_APPROVED = 'Approved';
+        const ORDER_REFUNDED = 'Refunded';
         const SIGNATURE_SEPARATOR = ';';
         const ORDER_SEPARATOR = ":";
         const ORDER_SUFFIX = '_woo_w4p_';
@@ -375,7 +376,7 @@ function woocommerce_wayforpay_init()
                 'orderDate' => strtotime($orderDate),
                 'currency' => $currency,
                 'amount' => $order->get_total(),
-                'returnUrl' => $this->getCallbackUrl(),
+                'returnUrl' => $this->getCallbackUrl().'?key='.$order->order_key.'&order='.$order_id,
                 'serviceUrl' => $this->getCallbackUrl(true),
                 'language' => $this->getLanguage()
             );
@@ -479,9 +480,13 @@ function woocommerce_wayforpay_init()
 
                 $order->update_status('processing');
                 $order->payment_complete();
-                $order->add_order_note('WayForPay.com payment successful.<br/>WayForPay.com ID: ' . ' (' . $_REQUEST['payment_id'] . ')');
+                $order->add_order_note('WayForPay.com payment successful.<br/>WayForPay.com ID: ' . ' (' . (isset($response['orderReference'])?$response['orderReference']:'-') . ')');
                 return true;
-            }
+            } elseif ($response['transactionStatus'] == self::ORDER_REFUNDED) {
+                $order->update_status('cancelled');
+                $order->add_order_note('Refund payment.');
+                return true;
+	    }
 
             $woocommerce->cart->empty_cart();
 
