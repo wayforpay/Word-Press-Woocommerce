@@ -382,11 +382,20 @@ function woocommerce_wayforpay_init()
             );
 
             $items = $order->get_items();
-            foreach ($items as $item) {
-                $wayforpay_args['productName'][] = esc_html($item['name']);
-                $wayforpay_args['productCount'][] = $item['qty'];
-                $wayforpay_args['productPrice'][] = $item['line_total'];
-            }
+	    if (
+	    	isset($item['name']) &&
+		!empty($item['name'])
+	    ) {
+                foreach ($items as $item) {
+		    $wayforpay_args['productName'][] = esc_html($item['name']);
+		    $wayforpay_args['productCount'][] = $item['qty'];
+		    $wayforpay_args['productPrice'][] = $item['line_total'];
+		}
+	    } else {
+		$wayforpay_args['productName'][] = esc_html($wayforpay_args['orderReference']);
+		$wayforpay_args['productCount'][] = 1;
+		$wayforpay_args['productPrice'][] = $wayforpay_args['amount'];
+	    }
             $phone = $order->billing_phone;
             $phone = str_replace(array('+', ' ', '(', ')'), array('', '', '', ''), $phone);
             if (strlen($phone) == 10) {
