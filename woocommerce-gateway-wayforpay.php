@@ -383,8 +383,8 @@ function woocommerce_wayforpay_init()
 
             $items = $order->get_items();
 	    if (
-	    	isset($item['name']) &&
-		!empty($item['name'])
+		is_array($items) &&
+                !empty($items)
 	    ) {
                 foreach ($items as $item) {
 		    $wayforpay_args['productName'][] = esc_html($item['name']);
