@@ -12,7 +12,9 @@
 >4. Внизу страницы в пункте "Payment Gateways", нажать кнопку "Settings" напротив "WayForPay Payments"
 
 >5. Ввести данные вашего мерчанта.
-В поле “Merchant KEY” Вам необходимо вставить MERCHANT LOGIN
-В поле “Merchant SALT” - вставьте, пожалуйста, MERCHANT SECRET KEY
+
+В поле “Merchant KEY” Вам необходимо вставить MERCHANT LOGIN.
+
+В поле “Merchant SALT” - вставьте, пожалуйста, MERCHANT SECRET KEY.
 
 ![Settings](https://github.com/wayforpay/Word-Press-Woocommerce/blob/master/settings.png)
