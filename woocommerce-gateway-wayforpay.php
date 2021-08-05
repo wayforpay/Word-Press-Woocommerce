@@ -387,12 +387,14 @@ function woocommerce_wayforpay_init()
                 !empty($items)
 	    ) {
                 foreach ($items as $item) {
-		    $wayforpay_args['productName'][] = esc_html($item['name']);
+//		    $wayforpay_args['productName'][] = esc_html($item['name']);
+		    $wayforpay_args['productName'][] = $item['name'];
 		    $wayforpay_args['productCount'][] = $item['qty'];
 		    $wayforpay_args['productPrice'][] = $item['line_total'];
 		}
 	    } else {
-		$wayforpay_args['productName'][] = esc_html($wayforpay_args['orderReference']);
+//		$wayforpay_args['productName'][] = esc_html($wayforpay_args['orderReference']);
+		$wayforpay_args['productName'][] = $wayforpay_args['orderReference'];
 		$wayforpay_args['productCount'][] = 1;
 		$wayforpay_args['productPrice'][] = $wayforpay_args['amount'];
 	    }
