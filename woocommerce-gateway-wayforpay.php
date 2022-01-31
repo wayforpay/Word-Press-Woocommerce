@@ -264,7 +264,7 @@ function woocommerce_wayforpay_init()
         {
             $form = '<form method="post" id="form_wayforpay" action="' . $this->url . '" accept-charset="utf-8">';
             foreach ($data as $k => $v) $form .= $this->printInput($k, $v);
-            $button = "<img style='position:absolute; top:50%; left:47%; margin-top:-125px; margin-left:-60px;' src='$img' >
+            $button = "<img style='position:absolute; top:50%; left:47%; margin-top:-125px; margin-left:-60px;' src='' >
 	<script>
 		function submitWayForPayForm()
 		{
