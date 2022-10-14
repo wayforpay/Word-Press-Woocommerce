@@ -1,20 +1,15 @@
-Модуль WayForPay для Wordpress WooCommerce 
+Модуль WayForPay для Wordpress WooCommerce
 =======
 
-Установка
+Встановлення
 ----
->1. Содержимое архива поместить в папку плагинов  Wordpress ( по-умолчанию - {корень сайта}/wp-content/plugins/)
+>1. Вміст архіву помістити в папку плагінів Wordpress ( за замовчуванням - {корінь сайту}/wp-content/plugins/)
+>2. Зайти в адмін розділ сайту (/wp-admin/) та активувати плагін "WooCommerce WayForPay Payments"
+>3. Перейти до розділу "WooCommerce" -> "Settings" -> "Checkout"
+>4. Внизу сторінки в пункті "WayForPay – Internet acquiring", натиснути кнопку "Settings" біля "Card payments, Apple Pay and Google Pay."
+>5. Ввести дані вашого мерчанта.
 
->2. Зайти в админ раздел сайта  (/wp-admin/) и активировать плагин "WooCommerce - WayForPay"
-
->3. Перейти в раздел "WooCommerce" -> "Settings" -> "Checkout" 
-
->4. Внизу страницы в пункте "Payment Gateways", нажать кнопку "Settings" напротив "WayForPay Payments"
-
->5. Ввести данные вашего мерчанта.
-
-В поле “Merchant KEY” Вам необходимо вставить MERCHANT LOGIN.
-
-В поле “Merchant SALT” - вставьте, пожалуйста, MERCHANT SECRET KEY.
+У полі “Merchant Login” необхідно вставити MERCHANT LOGIN.
+У полі “Merchant Secret key” – вставте, будь ласка, MERCHANT SECRET KEY.
 
 ![Settings](https://github.com/wayforpay/Word-Press-Woocommerce/blob/master/settings.png)

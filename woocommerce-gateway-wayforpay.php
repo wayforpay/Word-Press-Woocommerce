@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WooCommerce - WayForPay
+Plugin Name: WooCommerce WayForPay Payments
 Description: Wayforpay Payment Gateway for WooCommerce.
 Version: 1.0
 Author: support@wayforpay.com
@@ -11,6 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 add_action('plugins_loaded', 'woocommerce_wayforpay_init', 0);
 define('IMGDIR', WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/');
+load_plugin_textdomain( 'woocommerce-wayforpay-payments', false, plugin_basename(dirname(__FILE__)) . '/languages/' );
 
 function woocommerce_wayforpay_init()
 {
@@ -68,7 +69,7 @@ function woocommerce_wayforpay_init()
         {
             $this->id = 'wayforpay';
             $this->method_title = 'WayForPay';
-            $this->method_description = "Payment gateway";
+            $this->method_description = __('Card payments, Apple Pay and Google Pay.', 'woocommerce-wayforpay-payments');
             $this->has_fields = false;
             $this->init_form_fields();
             $this->init_settings();
@@ -102,54 +103,54 @@ function woocommerce_wayforpay_init()
 
         function init_form_fields()
         {
-            $this->form_fields = array('enabled' => array('title' => __('Enable/Disable', 'kdc'),
+            $this->form_fields = array('enabled' => array('title' => __('Enable/Disable', 'woocommerce-wayforpay-payments'),
                 'type' => 'checkbox',
-                'label' => __('Enable WayForPay Payment Module.', 'kdc'),
+                'label' => __('Enable WayForPay Payment Module.', 'woocommerce-wayforpay-payments'),
                 'default' => 'no',
-                'description' => 'Show in the Payment List as a payment option'),
-                'title' => array('title' => __('Title:', 'kdc'),
+                'description' => __('Show in the Payment List as a payment option', 'woocommerce-wayforpay-payments')),
+                'title' => array('title' => __('Title:', 'woocommerce-wayforpay-payments'),
                     'type' => 'text',
-                    'default' => __('WayForPay Payments', 'kdc'),
-                    'description' => __('This controls the title which the user sees during checkout.', 'kdc'),
+                    'default' => __('Internet acquiring', 'woocommerce-wayforpay-payments'),
+                    'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-wayforpay-payments'),
                     'desc_tip' => true),
-                'description' => array('title' => __('Description:', 'kdc'),
+                'description' => array('title' => __('Description:', 'woocommerce-wayforpay-payments'),
                     'type' => 'textarea',
-                    'default' => __('Pay securely by Credit or Debit Card or Internet Banking through WayForPay.com service.', 'kdc'),
-                    'description' => __('This controls the description which the user sees during checkout.', 'kdc'),
+                    'default' => __('Pay securely by Credit or Debit Card or Internet Banking through wayforpay.com service.', 'woocommerce-wayforpay-payments'),
+                    'description' => __('This controls the description which the user sees during checkout.', 'woocommerce-wayforpay-payments'),
                     'desc_tip' => true),
-                'merchant_account' => array('title' => __('Merchant KEY', 'kdc'),
+                'merchant_account' => array('title' => __('Merchant Login', 'woocommerce-wayforpay-payments'),
                     'type' => 'text',
-                    'description' => __('Given to Merchant by WayForPay.com'),
+                    'description' => __('Given to Merchant by wayforpay.com', 'woocommerce-wayforpay-payments'),
                     'default' => 'test_merch_n1',
                     'desc_tip' => true
                 ),
-                'secret_key' => array('title' => __('Merchant SALT', 'kdc'),
+                'secret_key' => array('title' => __('Merchant Secret key', 'woocommerce-wayforpay-payments'),
                     'type' => 'text',
-                    'description' => __('Given to Merchant by WayForPay.com', 'kdc'),
+                    'description' => __('Given to Merchant by wayforpay.com', 'woocommerce-wayforpay-payments'),
                     'desc_tip' => true,
                     'default' => 'flk3409refn54t54t*FNJRET',
                 ),
-                'showlogo' => array('title' => __('Show Logo', 'kdc'),
+                'showlogo' => array('title' => __('Show Logo', 'woocommerce-wayforpay-payments'),
                     'type' => 'checkbox',
-                    'label' => __('Show the "WayForPay.com" logo in the Payment Method section for the user', 'kdc'),
+                    'label' => __('Show the wayforpay.com logo in the Payment Method section for the user', 'woocommerce-wayforpay-payments'),
                     'default' => 'yes',
-                    'description' => __('Tick to show "WayForPay.com" logo'),
+                    'description' => __('Tick to show wayforpay.com logo', 'woocommerce-wayforpay-payments'),
                     'desc_tip' => true),
-                'returnUrl' => array('title' => __('Return URL'),
+                'returnUrl' => array('title' => __('Return URL', 'woocommerce-wayforpay-payments'),
                     'type' => 'select',
-                    'options' => $this->wayforpay_get_pages('Select Page'),
-                    'description' => __('URL of success page', 'kdc'),
+                    'options' => $this->wayforpay_get_pages(__('Select Page', 'woocommerce-wayforpay-payments')),
+                    'description' => __('URL of success page', 'woocommerce-wayforpay-payments'),
                     'desc_tip' => true),
-                'returnUrl_m' => array('title' => __('или укажите'),
+                'returnUrl_m' => array('title' => __('or specify', 'woocommerce-wayforpay-payments'),
                     'type' => 'text',
-                    'description' => __('URL of success page', 'kdc'),
+                    'description' => __('URL of success page', 'woocommerce-wayforpay-payments'),
                     'default' => '',
                     'desc_tip' => true
                 ),
-                'serviceUrl' => array('title' => __('Service URL'),
-                    'options' => $this->wayforpay_get_pages('Select Page'),
+                'serviceUrl' => array('title' => __('Service URL', 'woocommerce-wayforpay-payments'),
+                    'options' => $this->wayforpay_get_pages(__('Select Page', 'woocommerce-wayforpay-payments')),
                     'type' => 'select',
-                    'description' => __('URL with result of transaction page', 'kdc'),
+                    'description' => __('URL with result of transaction page', 'woocommerce-wayforpay-payments'),
                     'desc_tip' => true)
             );
         }
@@ -160,8 +161,8 @@ function woocommerce_wayforpay_init()
          **/
         public function admin_options()
         {
-            echo '<h3>' . __('WayForPay.com', 'kdc') . '</h3>';
-            echo '<p>' . __('Payment gateway') . '</p>';
+            echo '<h3>' . __('WayForPay.com', 'woocommerce-wayforpay-payments') . '</h3>';
+            echo '<p>' . __('Payment gateway', 'woocommerce-wayforpay-payments') . '</p>';
             echo '<table class="form-table">';
             // Generate the HTML For the settings form.
             $this->generate_settings_html();
@@ -185,7 +186,7 @@ function woocommerce_wayforpay_init()
         {
             global $woocommerce;
 
-            echo '<p>' . __('Спасибо за ваш заказ, сейчас вы будете перенаправлены на страницу оплаты WayForPay.', 'kdc') . '</p>';
+            echo '<p>' . __('Thank you for your order, you will now be redirected to the WayForPay payment page.', 'woocommerce-wayforpay-payments') . '</p>';
             echo $this->generate_wayforpay_form($order);
 
             $woocommerce->cart->empty_cart();
@@ -473,29 +474,29 @@ function woocommerce_wayforpay_init()
             list($orderId,) = explode(self::ORDER_SUFFIX, $response['orderReference']);
             $order = new WC_Order($orderId);
             if ($order === FALSE) {
-                return 'An error has occurred during payment. Please contact us to ensure your order has submitted.';
+                return __('An error has occurred during payment. Please contact us to ensure your order has submitted.', 'woocommerce-wayforpay-payments');
             }
 
             if ($this->merchant_id != $response['merchantAccount']) {
-                return 'An error has occurred during payment. Merchant data is incorrect.';
+                return __('An error has occurred during payment. Merchant data is incorrect.', 'woocommerce-wayforpay-payments');
             }
 
             $responseSignature = $response['merchantSignature'];
 
 
             if ($this->getResponseSignature($response) != $responseSignature) {
-                die('An error has occurred during payment. Signature is not valid.');
+                die( __('An error has occurred during payment. Signature is not valid.', 'woocommerce-wayforpay-payments'));
             }
 
             if ($response['transactionStatus'] == self::ORDER_APPROVED) {
 
                 $order->update_status('processing');
                 $order->payment_complete();
-                $order->add_order_note('WayForPay.com payment successful.<br/>WayForPay.com ID: ' . ' (' . (isset($response['orderReference'])?$response['orderReference']:'-') . ')');
+                $order->add_order_note( __('WayForPay payment successful.<br/>WayForPay ID: ', 'woocommerce-wayforpay-payments') . ' (' . (isset($response['orderReference'])?$response['orderReference']:'-') . ')');
                 return true;
             } elseif ($response['transactionStatus'] == self::ORDER_REFUNDED) {
                 $order->update_status('cancelled');
-                $order->add_order_note('Refund payment.');
+                $order->add_order_note(__('Refund payment.', 'woocommerce-wayforpay-payments'));
                 return true;
 	    }
 
@@ -514,7 +515,7 @@ function woocommerce_wayforpay_init()
             if ($paymentInfo === true) {
                 echo $this->getAnswerToGateWay($data);
 
-                $this->msg['message'] = "Thank you for shopping with us. Your account has been charged and your transaction is successful.";
+                $this->msg['message'] = __('Thank you for shopping with us. Your account has been charged and your transaction is successful.', 'woocommerce-wayforpay-payments');
                 $this->msg['class'] = 'woocommerce-message';
             }
             exit;
