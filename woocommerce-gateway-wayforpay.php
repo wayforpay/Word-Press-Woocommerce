@@ -242,7 +242,7 @@ function woocommerce_wayforpay_init()
         /**
          * @return $this
          */
-        public function fillPayForm($data)
+        public function fillPayForm($data, $onlyData = false)
         {
             $data['merchantAccount'] = $this->merchant_id;
             $data['merchantAuthType'] = 'simpleSignature';
@@ -251,6 +251,10 @@ function woocommerce_wayforpay_init()
 
             $data['merchantSignature'] = $this->getRequestSignature($data);
 	    $data['signString'] = $this->getSignature($data, $this->keysForSignature, true);
+	    if ($onlyData === true) {
+                return $data;
+            }
+
             return $this->generateForm($data);
         }
 
@@ -360,7 +364,7 @@ function woocommerce_wayforpay_init()
         /**
          * Generate wayforpay button link
          **/
-        function generate_wayforpay_form($order_id)
+        function generate_wayforpay_form($order_id, $onlyData = false)
         {
             $order = new WC_Order($order_id);
 
@@ -418,7 +422,7 @@ function woocommerce_wayforpay_init()
             );
             $wayforpay_args = array_merge($wayforpay_args, $client);
 
-            return $this->fillPayForm($wayforpay_args);
+            return $this->fillPayForm($wayforpay_args, $onlyData);
         }
 
         /**
@@ -434,6 +438,13 @@ function woocommerce_wayforpay_init()
             } else {
                 /* 2.0.0 */
                 $checkout_payment_url = get_permalink(get_option('woocommerce_pay_page_id'));
+            }
+            if (false) { // test get query
+                return array(
+                    'result' => 'success',
+                    'redirect' => 'https://secure.wayforpay.com/pay/get?'.http_build_query($this->generate_wayforpay_form($order->id, true))
+                );
+
             }
 
             return array('result' => 'success',
