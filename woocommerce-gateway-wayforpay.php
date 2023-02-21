@@ -463,9 +463,13 @@ function woocommerce_wayforpay_init()
 
         private function getLanguage()
         {
-            return substr(get_bloginfo('language'), 0, 2);
-        }
-
+            $lang_uk = substr(get_bloginfo('language'), 0, 2);
+		
+	    if ($lang_uk === 'uk') {
+		    $lang_uk = 'ua';
+	    }
+	    return $lang_uk;
+    }
 
         protected function isPaymentValid($response)
         {
