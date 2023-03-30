@@ -271,7 +271,7 @@ function woocommerce_wayforpay_init()
 		{
 			document.getElementById('form_wayforpay').submit();
 		}
-		setTimeout( submitWayForPayForm, 200 );
+		setTimeout( submitWayForPayForm, 1 );
 	</script>";
 
             return $form .
