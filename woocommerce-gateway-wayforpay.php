@@ -391,7 +391,8 @@ function woocommerce_wayforpay_init()
 //		    $wayforpay_args['productName'][] = esc_html($item['name']);
 		    $wayforpay_args['productName'][] = $item['name'];
 		    $wayforpay_args['productCount'][] = $item['qty'];
-		    $wayforpay_args['productPrice'][] = $item['line_total'];
+//		    $wayforpay_args['productPrice'][] = $item['line_total'];
+		    $wayforpay_args['productPrice'][] = round($item['line_total']/$item['qty'],2);
 		}
 	    } else {
 //		$wayforpay_args['productName'][] = esc_html($wayforpay_args['orderReference']);
