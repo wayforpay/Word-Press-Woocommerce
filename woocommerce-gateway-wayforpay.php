@@ -328,7 +328,7 @@ function woocommerce_wayforpay_init()
                 }
 
             }
-            return null;
+            return $this->getAnswerToGateWay($inputData);
 
         }
 
