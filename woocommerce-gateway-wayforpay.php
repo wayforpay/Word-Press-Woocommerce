@@ -491,7 +491,8 @@ function woocommerce_wayforpay_init()
 
             if ($response['transactionStatus'] == self::ORDER_APPROVED) {
 
-                $order->update_status('processing');
+//                $order->update_status('processing');
+                $order->update_status('completed');
                 $order->payment_complete();
                 $order->add_order_note( __('WayForPay payment successful.<br/>WayForPay ID: ', 'woocommerce-wayforpay-payments') . ' (' . (isset($response['orderReference'])?$response['orderReference']:'-') . ')');
                 return true;
