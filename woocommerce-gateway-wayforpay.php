@@ -271,7 +271,7 @@ function woocommerce_wayforpay_init()
 		{
 			document.getElementById('form_wayforpay').submit();
 		}
-		setTimeout( submitWayForPayForm, 200 );
+		setTimeout( submitWayForPayForm, 1 );
 	</script>";
 
             return $form .
@@ -377,7 +377,7 @@ function woocommerce_wayforpay_init()
                 'orderDate' => strtotime($orderDate),
                 'currency' => $currency,
                 'amount' => $order->get_total(),
-                'returnUrl' => $this->getCallbackUrl().'?key='.$order->order_key.'&order='.$order_id,
+		'returnUrl' => $order->get_checkout_order_received_url(),
                 'serviceUrl' => $this->getCallbackUrl(true),
                 'language' => $this->getLanguage()
             );
