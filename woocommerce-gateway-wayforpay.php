@@ -1,10 +1,13 @@
 <?php
 /*
 Plugin Name: WooCommerce WayForPay Payments
-Description: Wayforpay Payment Gateway for WooCommerce.
-Version: 1.0
+Description: WayForPay Payment Gateway for WooCommerce.
+Version: 1.4.8
+Author: Dev team WayForPay
 Author: support@wayforpay.com
-Author URI: http://wayforpay.com/
+Requires Plugins: woocommerce
+Plugin URI: https://github.com/wayforpay/Word-Press-Woocommerce
+Author URI: https://wayforpay.com/
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 */
@@ -36,9 +39,11 @@ function woocommerce_wayforpay_init()
 
         const ORDER_APPROVED = 'Approved';
         const ORDER_REFUNDED = 'Refunded';
+        const ORDER_DECLINED = 'Declined';
         const SIGNATURE_SEPARATOR = ';';
         const ORDER_SEPARATOR = ":";
         const ORDER_SUFFIX = '_woo_w4p_';
+        const ORDER_PREFIX  = 'wc_order';
 
         protected $keysForResponseSignature = array(
             'merchantAccount',
@@ -88,6 +93,9 @@ function woocommerce_wayforpay_init()
             $this->msg['message'] = "";
             $this->msg['class'] = "";
 
+            $script = 'var wfp_title = "' . $this->settings['title'] . '";';
+            $script .= 'var wfp_description = "' . $this->settings['description'] . '";';
+            wp_add_inline_script('jquery', $script);
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 /* 2.0.0 */
                 add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_wayforpay_response'));
@@ -99,8 +107,68 @@ function woocommerce_wayforpay_init()
             }
 
             add_action('woocommerce_receipt_wayforpay', array(&$this, 'receipt_page'));
+            add_filter( 'template_redirect', array(&$this, 'is_failed_payment'), 10, 1);
+            add_action( 'init', array(&$this,'clear_cart_on_redirect'));
         }
 
+        /**
+         * @return void
+        */
+        public function clear_cart_on_redirect() {
+            if (!session_id()) {
+                session_start();
+            }
+            if (isset( $_SESSION['is_need_cart_clear'] ) && $_SESSION['is_need_cart_clear'] == 1) {
+                WC()->cart->empty_cart();
+                $_SESSION['is_need_cart_clear'] = 0;
+            }
+        }
+
+        /**
+         * @param $template
+         *
+         * @return mixed
+         */
+        public function is_failed_payment($template){
+            static $called = false;
+            if($called)
+                return $template;
+
+            if(isset($_GET['order-received']) && isset($_GET['key']) && str_starts_with( $_GET['key'], self::ORDER_PREFIX ) ) {
+                $paymentInfo = $this->isPaymentValid($_POST);
+                if($paymentInfo === true) {
+                    wc_add_notice( __(
+                        'Thank you for shopping with us. Your account has been charged and your transaction is successful.',
+                        'woocommerce-wayforpay-payments'
+                    ));
+                }else{
+                    $order = new WC_Order(absint($_GET['order-received']));
+                    $error_message = __('A server error occurred while processing the payment. Error:', 'woocommerce-wayforpay-payments')
+                    . $order->get_meta('reasonCode') . '(' . $order->get_meta('reason') . ")<br/>"
+                    . '<a href="' .  $this->getUrlBySlug('checkout') . '">' . __('Return to checkout', 'woocommerce-wayforpay-payments') . '</a>';
+                    wc_add_notice($error_message, 'error');
+                }
+                wc_print_notices();
+            }
+            $called = true;
+
+            return $template;
+        }
+
+        /**
+         * @param $page_slug
+         *
+         * @return string
+         */
+        private function getUrlBySlug($page_slug){
+            $page = get_page_by_path($page_slug);
+
+            return $page ? get_permalink($page->ID) : home_url();
+        }
+
+        /**
+         * @return void
+         */
         function init_form_fields()
         {
             $this->form_fields = array('enabled' => array('title' => __('Enable/Disable', 'woocommerce-wayforpay-payments'),
@@ -130,7 +198,7 @@ function woocommerce_wayforpay_init()
                     'desc_tip' => true,
                     'default' => 'flk3409refn54t54t*FNJRET',
                 ),
-                'showlogo' => array('title' => __('Show Logo', 'woocommerce-wayforpay-payments'),
+                'showlogo' => array('title' => __('Show Wayforpay logo for classic checkout', 'woocommerce-wayforpay-payments'),
                     'type' => 'checkbox',
                     'label' => __('Show the wayforpay.com logo in the Payment Method section for the user', 'woocommerce-wayforpay-payments'),
                     'default' => 'yes',
@@ -189,7 +257,7 @@ function woocommerce_wayforpay_init()
             echo '<p>' . __('Thank you for your order, you will now be redirected to the WayForPay payment page.', 'woocommerce-wayforpay-payments') . '</p>';
             echo $this->generate_wayforpay_form($order);
 
-            $woocommerce->cart->empty_cart();
+//            $woocommerce->cart->empty_cart();// no need to clear cart if payment error
         }
 
         /**
@@ -377,8 +445,8 @@ function woocommerce_wayforpay_init()
                 'orderDate' => strtotime($orderDate),
                 'currency' => $currency,
                 'amount' => $order->get_total(),
-                'returnUrl' => $this->getCallbackUrl().'?key='.$order->order_key.'&order='.$order_id,
-                'serviceUrl' => $this->getCallbackUrl(true),
+                'returnUrl' => $this->getResponseUrl($order),
+                'serviceUrl' => $this->getCallbackUrl(),
                 'language' => $this->getLanguage()
             );
 
@@ -445,21 +513,17 @@ function woocommerce_wayforpay_init()
          * @param bool $service
          * @return bool|string
          */
-        private function getCallbackUrl($service = false)
-        {
+        private function getCallbackUrl(){
+            return wc_get_endpoint_url('wc-api', strtolower(get_class($this)), get_site_url());
+        }
 
-            $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
-            if (!$service) {
-		if (
-		    isset($this->settings['returnUrl_m']) &&
-		    trim($this->settings['returnUrl_m']) !== ''
-	   	) {
-		    return trim($this->settings['returnUrl_m']);
-		}
-                return $redirect_url;
-            }
-
-            return add_query_arg('wc-api', get_class($this), $redirect_url);
+        /**
+         * @param $order
+         *
+         * @return false|string
+         */
+        public function getResponseUrl($order){
+            return $this->redirect_page_id ? get_permalink($this->redirect_page_id) : $this->get_return_url($order);
         }
 
         private function getLanguage()
@@ -470,8 +534,6 @@ function woocommerce_wayforpay_init()
 
         protected function isPaymentValid($response)
         {
-            global $woocommerce;
-
             list($orderId,) = explode(self::ORDER_SUFFIX, $response['orderReference']);
             $order = new WC_Order($orderId);
             if ($order === FALSE) {
@@ -495,15 +557,50 @@ function woocommerce_wayforpay_init()
                 $order->update_status('completed');
                 $order->payment_complete();
                 $order->add_order_note( __('WayForPay payment successful.<br/>WayForPay ID: ', 'woocommerce-wayforpay-payments') . ' (' . (isset($response['orderReference'])?$response['orderReference']:'-') . ')');
+                $_SESSION['is_need_cart_clear'] = 1;//clear cart after successfully payment on next init hook
+                if(isset($_POST['reason']) && empty($order->get_meta('reason'))){
+                    $order->add_meta_data('reason', $_POST['reason']);
+                }else{
+                    $order->update_meta_data('reason', $_POST['reason']);
+                }
+                if(isset($_POST['reasonCode']) && empty($order->get_meta('reasonCode'))){
+                    $order->add_meta_data('reasonCode', absint($_POST['reasonCode']));
+                }else{
+                    $order->update_meta_data('reasonCode', absint($_POST['reasonCode']));
+                }
+                if(isset($_POST['orderReference']) && empty($order->get_meta('orderReference'))){
+                    $order->add_meta_data('orderReference', $_POST['orderReference']);
+                }else{
+                    $order->update_meta_data('orderReference', $_POST['orderReference']);
+                }
+                $order->save();
                 return true;
             } elseif ($response['transactionStatus'] == self::ORDER_REFUNDED) {
                 $order->update_status('cancelled');
                 $order->add_order_note(__('Refund payment.', 'woocommerce-wayforpay-payments'));
                 return true;
-	    }
+            }elseif ($response['transactionStatus'] == self::ORDER_DECLINED){
+                $order->update_status('failed');
+                if(isset($_POST['reason']) && empty($order->get_meta('reason'))){
+                    $order->add_meta_data('reason', $_POST['reason']);
+                }else{
+                    $order->update_meta_data('reason', $_POST['reason']);
+                }
+                if(isset($_POST['reasonCode']) && empty($order->get_meta('reasonCode'))){
+                    $order->add_meta_data('reasonCode', absint($_POST['reasonCode']));
+                }else{
+                    $order->update_meta_data('reasonCode', absint($_POST['reasonCode']));
+                }
+                if(isset($_POST['orderReference']) && empty($order->get_meta('orderReference'))){
+                    $order->add_meta_data('orderReference', $_POST['orderReference']);
+                }else{
+                    $order->update_meta_data('orderReference', $_POST['orderReference']);
+                }
+                $order->save();
+                return false;
+            }
 
-            $woocommerce->cart->empty_cart();
-
+            WC()->cart->empty_cart();
             return false;
         }
 
@@ -558,5 +655,26 @@ function woocommerce_wayforpay_init()
         return $methods;
     }
 
+    function declare_cart_checkout_blocks_compatibility() {
+        if (class_exists('\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
+        }
+    }
+
+    function oawoo_register_order_approval_payment_method_type() {
+        if ( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+            return;
+        }
+        require_once plugin_dir_path(__FILE__) . 'class-block.php';
+        add_action(
+            'woocommerce_blocks_payment_method_type_registration',
+            function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+                $payment_method_registry->register( new My_Custom_Gateway_Blocks );
+            }
+        );
+    }
+
     add_filter('woocommerce_payment_gateways', 'woocommerce_add_wayforpay_gateway');
+    add_action('before_woocommerce_init', 'declare_cart_checkout_blocks_compatibility');
+    add_action( 'woocommerce_blocks_loaded', 'oawoo_register_order_approval_payment_method_type' );
 }

@@ -58,7 +58,10 @@ msgstr ""
 msgid "Merchant Login"
 msgstr ""
 
-#: woocommerce-gateway-wayforpay.php:123 
+#: woocommerce-gateway-wayforpay.php:125
+msgid "Thank you for shopping with us. Your account has been charged and your transaction is successful."
+msgstr ""
+
 #: woocommerce-gateway-wayforpay.php:129
 msgid "Given to Merchant by wayforpay.com"
 msgstr ""
@@ -67,8 +70,16 @@ msgstr ""
 msgid "Merchant Secret key"
 msgstr ""
 
+#: woocommerce-gateway-wayforpay.php:128
+msgid "A server error occurred while processing the payment. Error:"
+msgstr ""
+
+#: woocommerce-gateway-wayforpay.php:130
+msgid "Return to checkout"
+msgstr ""
+
 #: woocommerce-gateway-wayforpay.php:133
-msgid "Show Logo"
+msgid "Show Wayforpay logo for classic checkout"
 msgstr ""
 
 #: woocommerce-gateway-wayforpay.php:135
@@ -88,7 +99,7 @@ msgstr ""
 msgid "Select Page"
 msgstr ""
 
-#: woocommerce-gateway-wayforpay.php:142 
+#: woocommerce-gateway-wayforpay.php:142
 #: woocommerce-gateway-wayforpay.php:146
 msgid "URL of success page"
 msgstr ""
