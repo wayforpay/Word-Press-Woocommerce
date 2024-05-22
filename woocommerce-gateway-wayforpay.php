@@ -115,6 +115,9 @@ function woocommerce_wayforpay_init()
          * @return void
         */
         public function clear_cart_on_redirect() {
+            if (!WC()->cart) {//if cart already empty
+                return;
+            }
             if (!session_id()) {
                 session_start();
             }
