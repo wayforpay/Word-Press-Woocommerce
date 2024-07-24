@@ -447,18 +447,30 @@ function woocommerce_wayforpay_init()
          */
         private function getCallbackUrl($service = false)
         {
+            // Getting the current language using the Polylang function
+            $language = pll_current_language();
+            // Getting the default language using the Polylang function
+            $default_language = pll_default_language();
 
+            // Forming language version specific URL
             $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
-            if (!$service) {
-		if (
-		    isset($this->settings['returnUrl_m']) &&
-		    trim($this->settings['returnUrl_m']) !== ''
-	   	) {
-		    return trim($this->settings['returnUrl_m']);
-		}
-                return $redirect_url;
+
+            if ($language && $language !== $default_language) {
+                // Add a language prefix to the URL only if it is not the primary language
+                $redirect_url = home_url($language . '/' . ltrim(str_replace(home_url(), '', $redirect_url), '/'));
             }
 
+            if (!$service) {
+                if (isset($this->settings['returnUrl_m']) && trim($this->settings['returnUrl_m']) !== '') {
+                    $return_url = trim($this->settings['returnUrl_m']);
+                    // Add language prefix to returnUrl only if it is not the primary language
+                    if ($language && $language !== $default_language) {
+                        $return_url = home_url($language . '/' . ltrim(str_replace(home_url(), '', $return_url), '/'));
+                    }
+                    return $return_url;
+                }
+                return $redirect_url;
+            }
             return add_query_arg('wc-api', get_class($this), $redirect_url);
         }
 
@@ -491,7 +503,6 @@ function woocommerce_wayforpay_init()
 
             if ($response['transactionStatus'] == self::ORDER_APPROVED) {
 
-//                $order->update_status('processing');
                 $order->update_status('completed');
                 $order->payment_complete();
                 $order->add_order_note( __('WayForPay payment successful.<br/>WayForPay ID: ', 'woocommerce-wayforpay-payments') . ' (' . (isset($response['orderReference'])?$response['orderReference']:'-') . ')');
