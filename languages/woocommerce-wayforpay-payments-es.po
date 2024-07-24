@@ -1,0 +1,161 @@
+# Copyright (C) 2022 Wayforpay Payment Engine
+# This file is distributed under the same license as the Wayforpay Payment Gateway for WooCommerce plugin.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce WayForPay Payments\n"
+"Report-Msgid-Bugs-To: https://github.com/wayforpay/Word-Press-Woocommerce\n"
+"POT-Creation-Date: 2022-09-25 11:23+0300\n"
+"PO-Revision-Date: 2024-07-24 15:38+0300\n"
+"Last-Translator: \n"
+"Language-Team: Wayforpay <support@wayforpay.com>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.4\n"
+
+#: woocommerce-gateway-wayforpay.php:72
+msgid "Card payments, Apple Pay and Google Pay."
+msgstr "Pagos con tarjeta, Apple Pay y Google Pay."
+
+#: woocommerce-gateway-wayforpay.php:106
+msgid "Enable/Disable"
+msgstr "Habilitar/Deshabilitar"
+
+#: woocommerce-gateway-wayforpay.php:108
+msgid "Enable WayForPay Payment Module."
+msgstr "Habilitar el módulo de pago WayForPay."
+
+#: woocommerce-gateway-wayforpay.php:110
+msgid "Show in the Payment List as a payment option"
+msgstr "Mostrar en la lista de pagos como una opción de pago"
+
+#: woocommerce-gateway-wayforpay.php:111
+msgid "Title:"
+msgstr "Título:"
+
+#: woocommerce-gateway-wayforpay.php:113
+msgid "Internet acquiring"
+msgstr "Adquisición por Internet"
+
+#: woocommerce-gateway-wayforpay.php:114
+msgid "This controls the title which the user sees during checkout."
+msgstr "Esto controla el título que el usuario ve durante el proceso de pago."
+
+#: woocommerce-gateway-wayforpay.php:116
+msgid "Description:"
+msgstr "Descripción:"
+
+#: woocommerce-gateway-wayforpay.php:118
+msgid ""
+"Pay securely by Credit or Debit Card or Internet Banking through wayforpay."
+"com service."
+msgstr ""
+"Pague de forma segura con tarjeta de crédito o débito o mediante banca en "
+"línea a través del servicio wayforpay.com."
+
+#: woocommerce-gateway-wayforpay.php:119
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+"Esto controla la descripción que el usuario ve durante el proceso de pago."
+
+#: woocommerce-gateway-wayforpay.php:121
+msgid "Merchant Login"
+msgstr "Nombre de usuario del comerciante"
+
+#: woocommerce-gateway-wayforpay.php:123 woocommerce-gateway-wayforpay.php:129
+msgid "Given to Merchant by wayforpay.com"
+msgstr "Proporcionado al comerciante por wayforpay.com"
+
+#: woocommerce-gateway-wayforpay.php:127
+msgid "Merchant Secret key"
+msgstr "Clave secreta del comerciante"
+
+#: woocommerce-gateway-wayforpay.php:133
+msgid "Show Logo"
+msgstr "Mostrar logotipo"
+
+#: woocommerce-gateway-wayforpay.php:135
+msgid "Show the wayforpay.com logo in the Payment Method section for the user"
+msgstr ""
+"Mostrar el logotipo de wayforpay.com en la sección de Método de Pago para el "
+"usuario"
+
+#: woocommerce-gateway-wayforpay.php:137
+msgid "Tick to show wayforpay.com logo"
+msgstr "Marque para mostrar el logotipo de wayforpay.com"
+
+#: woocommerce-gateway-wayforpay.php:139
+msgid "Return URL"
+msgstr "URL de retorno"
+
+#: woocommerce-gateway-wayforpay.php:141 woocommerce-gateway-wayforpay.php:151
+msgid "Select Page"
+msgstr "Seleccionar página"
+
+#: woocommerce-gateway-wayforpay.php:142 woocommerce-gateway-wayforpay.php:146
+msgid "URL of success page"
+msgstr "URL de la página de éxito"
+
+#: woocommerce-gateway-wayforpay.php:144
+msgid "or specify"
+msgstr "o especificar"
+
+#: woocommerce-gateway-wayforpay.php:150
+msgid "Service URL"
+msgstr "URL del servicio"
+
+#: woocommerce-gateway-wayforpay.php:153
+msgid "URL with result of transaction page"
+msgstr "URL de la página con el resultado de la transacción"
+
+#: woocommerce-gateway-wayforpay.php:164
+msgid "WayForPay.com"
+msgstr "WayForPay.com"
+
+#: woocommerce-gateway-wayforpay.php:166
+msgid "Payment gateway"
+msgstr "Pasarela de pago"
+
+#: woocommerce-gateway-wayforpay.php:189
+msgid ""
+"Thank you for your order, you will now be redirected to the WayForPay "
+"payment page."
+msgstr ""
+"Gracias por su pedido, ahora será redirigido a la página de pago de "
+"WayForPay."
+
+#: woocommerce-gateway-wayforpay.php:477
+msgid ""
+"An error has occurred during payment. Please contact us to ensure your order "
+"has submitted."
+msgstr ""
+"Se ha producido un error durante el pago. Por favor, contáctenos para "
+"asegurarse de que su pedido se ha enviado."
+
+#: woocommerce-gateway-wayforpay.php:481
+msgid "An error has occurred during payment. Merchant data is incorrect."
+msgstr ""
+"Se ha producido un error durante el pago. Los datos del comerciante son "
+"incorrectos."
+
+#: woocommerce-gateway-wayforpay.php:488
+msgid "An error has occurred during payment. Signature is not valid."
+msgstr "Se ha producido un error durante el pago. La firma no es válida."
+
+#: woocommerce-gateway-wayforpay.php:495
+msgid "WayForPay payment successful.<br/>WayForPay ID: "
+msgstr "Pago de WayForPay exitoso.ID de WayForPay: "
+
+#: woocommerce-gateway-wayforpay.php:499
+msgid "Refund payment."
+msgstr "Reembolso del pago."
+
+#: woocommerce-gateway-wayforpay.php:518
+msgid ""
+"Thank you for shopping with us. Your account has been charged and your "
+"transaction is successful."
+msgstr ""
+"Gracias por comprar con nosotros. Su cuenta ha sido cargada y su transacción "
+"ha sido exitosa."
