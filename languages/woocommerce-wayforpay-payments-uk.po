@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: WooCommerce WayForPay Payments\n"
 "Report-Msgid-Bugs-To: https://github.com/wayforpay/Word-Press-Woocommerce\n"
 "POT-Creation-Date: 2022-09-25 11:23+0300\n"
-"PO-Revision-Date: 2022-10-12 21:10+0200\n"
+"PO-Revision-Date: 2024-07-24 17:16+0300\n"
 "Last-Translator: Wlodz Mur <wm@iwpress.eu>\n"
 "Language-Team: Wayforpay <support@wayforpay.com>\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: woocommerce-gateway-wayforpay.php:72
 msgid "Card payments, Apple Pay and Google Pay."
@@ -41,7 +41,7 @@ msgstr "Інтернет-еквайринг"
 
 #: woocommerce-gateway-wayforpay.php:114
 msgid "This controls the title which the user sees during checkout."
-msgstr "Тут встановлюється заголов, який бачить покупець під час оформлення замовлення."
+msgstr "Цей параметр керує заголовком, який користувач бачить під час оформлення замовлення."
 
 #: woocommerce-gateway-wayforpay.php:116
 msgid "Description:"
@@ -53,31 +53,31 @@ msgstr "Сплачуйте безпечно за допомогою кредит
 
 #: woocommerce-gateway-wayforpay.php:119
 msgid "This controls the description which the user sees during checkout."
-msgstr "Тут задаэться опис, який бачить покупець під час оформлення замовлення."
+msgstr "Цей параметр керує описом, який бачить покупець під час оформлення замовлення."
 
 #: woocommerce-gateway-wayforpay.php:121
 msgid "Merchant Login"
-msgstr "Логін продавця"
+msgstr "Логін мерчанта"
 
 #: woocommerce-gateway-wayforpay.php:123 woocommerce-gateway-wayforpay.php:129
 msgid "Given to Merchant by wayforpay.com"
-msgstr "Продавцю надає wayforpay.com"
+msgstr "Видається мерчанту сервісом wayforpay.com"
 
 #: woocommerce-gateway-wayforpay.php:127
 msgid "Merchant Secret key"
-msgstr "Секретний ключ продавця"
+msgstr "Секретний ключ мерчанта"
 
 #: woocommerce-gateway-wayforpay.php:133
 msgid "Show Logo"
-msgstr "Показати логотип"
+msgstr "Показувати логотип"
 
 #: woocommerce-gateway-wayforpay.php:135
 msgid "Show the wayforpay.com logo in the Payment Method section for the user"
-msgstr "Показувати покупцю логотип wayforpay.com у розділі \"Спосіб оплати\""
+msgstr "Показати користувачу логотип wayforpay.com у розділі «Спосіб оплати»"
 
 #: woocommerce-gateway-wayforpay.php:137
 msgid "Tick to show wayforpay.com logo"
-msgstr "Поставте позначку, щоб показати логотип wayforpay.com"
+msgstr "Поставте галочку, щоб показати логотип wayforpay.com"
 
 #: woocommerce-gateway-wayforpay.php:139
 msgid "Return URL"
@@ -97,11 +97,11 @@ msgstr "або вкажіть"
 
 #: woocommerce-gateway-wayforpay.php:150
 msgid "Service URL"
-msgstr "URL служби"
+msgstr "Сервісний URL"
 
 #: woocommerce-gateway-wayforpay.php:153
 msgid "URL with result of transaction page"
-msgstr "URL-адреса сторінки результатів транзакції"
+msgstr "URL сторінки з результатом транзакції"
 
 #: woocommerce-gateway-wayforpay.php:164
 msgid "WayForPay.com"
@@ -117,11 +117,11 @@ msgstr "Дякуємо за ваше замовлення, зараз ви бу�
 
 #: woocommerce-gateway-wayforpay.php:477
 msgid "An error has occurred during payment. Please contact us to ensure your order has submitted."
-msgstr "Під час оплати сталася помилка. Зв’яжіться з нами, щоб переконатися, що ваше замовлення відправлено."
+msgstr "Під час оплати виникла помилка. Будь ласка, зв'яжіться з нами, щоб переконатися, що ваше замовлення відправлено."
 
 #: woocommerce-gateway-wayforpay.php:481
 msgid "An error has occurred during payment. Merchant data is incorrect."
-msgstr "Під час оплати сталася помилка. Дані продавця неправильні."
+msgstr "Під час оплати виникла помилка. Дані продавця вказані невірно."
 
 #: woocommerce-gateway-wayforpay.php:488
 msgid "An error has occurred during payment. Signature is not valid."
@@ -137,4 +137,4 @@ msgstr "Повернення платежу."
 
 #: woocommerce-gateway-wayforpay.php:518
 msgid "Thank you for shopping with us. Your account has been charged and your transaction is successful."
-msgstr "Дякуємо за покупки. Ваша трансакція виконана успішно і з вашого рахунку стягнено кошти."
+msgstr "Дякуємо за покупку. З вашого рахунку списано кошти, і транзакція пройшла успішно."
