@@ -36,6 +36,7 @@ function woocommerce_wayforpay_init()
 
         const ORDER_APPROVED = 'Approved';
         const ORDER_REFUNDED = 'Refunded';
+        const ORDER_DECLINED = 'Declined';
         const SIGNATURE_SEPARATOR = ';';
         const ORDER_SEPARATOR = ":";
         const ORDER_SUFFIX = '_woo_w4p_';
@@ -500,7 +501,11 @@ function woocommerce_wayforpay_init()
                 $order->update_status('cancelled');
                 $order->add_order_note(__('Refund payment.', 'woocommerce-wayforpay-payments'));
                 return true;
-	    }
+            } elseif ($response['transactionStatus'] == self::ORDER_DECLINED) {
+                $order->update_status('failed');
+                $order->add_order_note('Payment declined.');
+                return true;
+            }
 
             $woocommerce->cart->empty_cart();
 
