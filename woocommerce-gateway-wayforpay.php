@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 add_action('plugins_loaded', 'woocommerce_wayforpay_init', 0);
 define('IMGDIR', WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/');
-load_plugin_textdomain( 'woocommerce-wayforpay-payments', false, plugin_basename(dirname(__FILE__)) . '/languages/' );
+load_plugin_textdomain('woocommerce-wayforpay-payments', false, plugin_basename(dirname(__FILE__)) . '/languages/');
 
 function woocommerce_wayforpay_init()
 {
@@ -81,8 +81,14 @@ function woocommerce_wayforpay_init()
 
             $this->serviceUrl = $this->settings['returnUrl'];
 
-            $this->merchant_id = $this->settings['merchant_account'];
-            $this->secretKey = $this->settings['secret_key'];
+            $hookMerchantData = do_action('woocommerce_wayforpay_get_merchant');
+            if (!empty($hookMerchantData) && is_array($hookMerchantData)) {
+                list($this->merchant_id, $this->secretKey) = $hookMerchantData;
+            } else {
+                $this->merchant_id = $this->settings['merchant_account'];
+                $this->secretKey = $this->settings['secret_key'];
+            }
+
             $this->description = $this->settings['description'];
 
             $this->msg['message'] = "";
@@ -233,10 +239,10 @@ function woocommerce_wayforpay_init()
             }
             $hash = implode(';', $hash);
             if ($hashOnly) {
-		return base64_encode($hash);
-	    } else {
+                return base64_encode($hash);
+            } else {
                 return hash_hmac('md5', $hash, $this->secretKey);
-	    }
+            }
         }
 
         /**
@@ -250,7 +256,7 @@ function woocommerce_wayforpay_init()
             $data['merchantTransactionSecureType'] = 'AUTO';
 
             $data['merchantSignature'] = $this->getRequestSignature($data);
-	    $data['signString'] = $this->getSignature($data, $this->keysForSignature, true);
+            $data['signString'] = $this->getSignature($data, $this->keysForSignature, true);
             return $this->generateForm($data);
         }
 
@@ -275,8 +281,8 @@ function woocommerce_wayforpay_init()
 	</script>";
 
             return $form .
-            "<input type='submit' style='display:none;' /></form>"
-            . $button;
+                "<input type='submit' style='display:none;' /></form>"
+                . $button;
         }
 
         /**
@@ -364,42 +370,42 @@ function woocommerce_wayforpay_init()
         {
             $order = new WC_Order($order_id);
 
-            $orderDate = isset($order->post->post_date)? $order->post->post_date : $order->order_date;
-            
+            $orderDate = isset($order->post->post_date) ? $order->post->post_date : $order->order_date;
+
             $currency = str_replace(
-            	array('ГРН','uah'),
-            	array('UAH','UAH'),
-            	get_woocommerce_currency()
-    	    );
+                array('ГРН', 'uah'),
+                array('UAH', 'UAH'),
+                get_woocommerce_currency()
+            );
 
             $wayforpay_args = array(
-                'orderReference' => $order_id . self::ORDER_SUFFIX.time(),
+                'orderReference' => $order_id . self::ORDER_SUFFIX . time(),
                 'orderDate' => strtotime($orderDate),
                 'currency' => $currency,
                 'amount' => $order->get_total(),
-                'returnUrl' => $this->getCallbackUrl().'?key='.$order->order_key.'&order='.$order_id,
+                'returnUrl' => $this->getCallbackUrl() . '?key=' . $order->order_key . '&order=' . $order_id,
                 'serviceUrl' => $this->getCallbackUrl(true),
                 'language' => $this->getLanguage()
             );
 
             $items = $order->get_items();
-	    if (
-		is_array($items) &&
+            if (
+                is_array($items) &&
                 !empty($items)
-	    ) {
+            ) {
                 foreach ($items as $item) {
 //		    $wayforpay_args['productName'][] = esc_html($item['name']);
-		    $wayforpay_args['productName'][] = $item['name'];
-		    $wayforpay_args['productCount'][] = $item['qty'];
+                    $wayforpay_args['productName'][] = $item['name'];
+                    $wayforpay_args['productCount'][] = $item['qty'];
 //		    $wayforpay_args['productPrice'][] = $item['line_total'];
-		    $wayforpay_args['productPrice'][] = round($item['line_total']/$item['qty'],2);
-		}
-	    } else {
+                    $wayforpay_args['productPrice'][] = round($item['line_total'] / $item['qty'], 2);
+                }
+            } else {
 //		$wayforpay_args['productName'][] = esc_html($wayforpay_args['orderReference']);
-		$wayforpay_args['productName'][] = $wayforpay_args['orderReference'];
-		$wayforpay_args['productCount'][] = 1;
-		$wayforpay_args['productPrice'][] = $wayforpay_args['amount'];
-	    }
+                $wayforpay_args['productName'][] = $wayforpay_args['orderReference'];
+                $wayforpay_args['productCount'][] = 1;
+                $wayforpay_args['productPrice'][] = $wayforpay_args['amount'];
+            }
             $phone = $order->billing_phone;
             $phone = str_replace(array('+', ' ', '(', ')'), array('', '', '', ''), $phone);
             if (strlen($phone) == 10) {
@@ -450,12 +456,12 @@ function woocommerce_wayforpay_init()
 
             $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
             if (!$service) {
-		if (
-		    isset($this->settings['returnUrl_m']) &&
-		    trim($this->settings['returnUrl_m']) !== ''
-	   	) {
-		    return trim($this->settings['returnUrl_m']);
-		}
+                if (
+                    isset($this->settings['returnUrl_m']) &&
+                    trim($this->settings['returnUrl_m']) !== ''
+                ) {
+                    return trim($this->settings['returnUrl_m']);
+                }
                 return $redirect_url;
             }
 
@@ -486,7 +492,7 @@ function woocommerce_wayforpay_init()
 
 
             if ($this->getResponseSignature($response) != $responseSignature) {
-                die( __('An error has occurred during payment. Signature is not valid.', 'woocommerce-wayforpay-payments'));
+                die(__('An error has occurred during payment. Signature is not valid.', 'woocommerce-wayforpay-payments'));
             }
 
             if ($response['transactionStatus'] == self::ORDER_APPROVED) {
@@ -494,13 +500,13 @@ function woocommerce_wayforpay_init()
 //                $order->update_status('processing');
                 $order->update_status('completed');
                 $order->payment_complete();
-                $order->add_order_note( __('WayForPay payment successful.<br/>WayForPay ID: ', 'woocommerce-wayforpay-payments') . ' (' . (isset($response['orderReference'])?$response['orderReference']:'-') . ')');
+                $order->add_order_note(__('WayForPay payment successful.<br/>WayForPay ID: ', 'woocommerce-wayforpay-payments') . ' (' . (isset($response['orderReference']) ? $response['orderReference'] : '-') . ')');
                 return true;
             } elseif ($response['transactionStatus'] == self::ORDER_REFUNDED) {
                 $order->update_status('cancelled');
                 $order->add_order_note(__('Refund payment.', 'woocommerce-wayforpay-payments'));
                 return true;
-	    }
+            }
 
             $woocommerce->cart->empty_cart();
 
