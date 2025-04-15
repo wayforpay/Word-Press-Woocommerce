@@ -33,6 +33,11 @@ function woocommerce_wayforpay_init()
     class WC_wayforpay extends WC_Payment_Gateway
     {
         protected $url = 'https://secure.wayforpay.com/pay';
+        protected $redirect_page_id;
+        protected $serviceUrl;
+        protected $merchant_id;
+        protected $secretKey;
+        protected $msg;
 
         const ORDER_APPROVED = 'Approved';
         const ORDER_REFUNDED = 'Refunded';
